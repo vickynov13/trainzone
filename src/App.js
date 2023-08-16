@@ -1,13 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './Header';
+import Pilot from './Pilot';
+import {Stack} from 'react-bootstrap';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        
-      </header>
-    </div>
+    <>
+    <Header/>
+    <Stack gap={2} className="col-md-5 mx-auto">
+      <div className="p-2"></div>
+      <div className="p-2"><Pilot/></div>
+    </Stack>
+    </>
   );
 }
 
