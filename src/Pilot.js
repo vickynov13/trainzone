@@ -20,16 +20,19 @@ function Pilot() {
         <>
         <Stack direction="horizontal" gap={3}>
             <div className="p-2">Status</div>
-            <div className="p-2" onSubmit={setrunstatus(1)}>
-                <Form>
+            <div className="p-2">
+                <Form >
                     <Form.Check // prettier-ignore
                         type="switch"
                         id="custom-switch"
                         label="Check this switch"
+                        checked={runstatus===0 ? false :true}
+                        onChange={()=>switchStatus()}
                     />
                 </Form>
             </div>
         </Stack>
+        <p>{runstatus}</p>
         <p>{statusres.runStatus}</p>
         <p>{statusres.speed}</p>
         <Button as="a" variant="primary">
@@ -39,14 +42,19 @@ function Pilot() {
         }
     </div>
   );
-}
-
-function switchStatus(runstatus){
+  function switchStatus(){
+        console.log("switchStatus");
+    
     if(runstatus===0){
-        return(1);
+        //return(1);
+        setrunstatus(1);
     }else{
-        return(0);
+        //return(0);
+        setrunstatus(0);
     }
 }
+}
+
+
 
 export default Pilot;
