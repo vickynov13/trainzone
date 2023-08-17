@@ -5,8 +5,9 @@ import axios from 'axios';
 
 const baseURL = 'http://ec2-54-199-245-177.ap-northeast-1.compute.amazonaws.com';
 
-function Pilot() {
+function Pilot(props) {
   const [statusres, setstatusres]=useState(null);
+  const [time, setTime] = useState(new Date());
   useEffect(() => {
     axios.get(baseURL+'/status').then((response) => {
       setstatusres(response.data);
@@ -14,6 +15,20 @@ function Pilot() {
       setstatusres(null);
     });
   },[]);
+  useEffect(()=>{
+    if(props.refreshRate >0){
+    const interval = setInterval(() => {
+      setTime(new Date());
+      axios.get(baseURL+'/status').then((response) => {
+      setstatusres(response.data);
+      console.log(response.data);
+        }).catch(error => {
+          setstatusres(null);
+        });
+    }, props.refreshRate*1000);
+    return () => clearInterval(interval);
+  }
+  },[time,props]);
   return (
     <div>
         {statusres
@@ -34,11 +49,11 @@ function Pilot() {
                 </Form>
             </div>
         </Stack>
+        <p>{props.refreshRate}</p>
         <p>{statusres.runStatus}</p>
         <p>{statusres.speed}</p>
-        <Button as="a" variant="primary">
-          Button as link
-        </Button></>
+        <Button variant="success">Down</Button>
+        <Button variant="danger">Up</Button></>
         : <p>Loading.... Refresh Page, if it takes more time. Server might be down</p>
         }
     </div>
