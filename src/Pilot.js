@@ -7,12 +7,13 @@ const baseURL = 'http://ec2-54-199-245-177.ap-northeast-1.compute.amazonaws.com'
 
 function Pilot() {
   const [statusres, setstatusres]=useState(null);
-  const [runstatus, setrunstatus]=useState(0);
   useEffect(() => {
     axios.get(baseURL+'/status').then((response) => {
       setstatusres(response.data);
+    }).catch(error => {
+      setstatusres(null);
     });
-  });
+  },[]);
   return (
     <div>
         {statusres
@@ -22,36 +23,35 @@ function Pilot() {
             <div className="p-2">Status</div>
             <div className="p-2">
                 <Form >
-                    <Form.Check // prettier-ignore
+                    <Form.Check
                         type="switch"
                         id="custom-switch"
                         label="Check this switch"
-                        checked={runstatus===0 ? false :true}
+                        //checked={runstatus===0 ? false :true}
+                        checked={statusres.runStatus===0 ? false :true}
                         onChange={()=>switchStatus()}
                     />
                 </Form>
             </div>
         </Stack>
-        <p>{runstatus}</p>
         <p>{statusres.runStatus}</p>
         <p>{statusres.speed}</p>
         <Button as="a" variant="primary">
           Button as link
         </Button></>
-        : <p>Loading....</p>
+        : <p>Loading.... Refresh Page, if it takes more time. Server might be down</p>
         }
     </div>
   );
   function switchStatus(){
-        console.log("switchStatus");
-    
-    if(runstatus===0){
-        //return(1);
-        setrunstatus(1);
-    }else{
-        //return(0);
-        setrunstatus(0);
-    }
+    setstatusres(null);
+    let statusVal;
+    (statusres.runStatus===0) ? statusVal = 1 :statusVal =0;
+    axios.get(baseURL+`/set/runStatus?value=${statusVal}`).then((response) => {
+      setstatusres(response.data);
+    }).catch(error => {
+      setstatusres(null);
+    });
 }
 }
 
