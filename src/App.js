@@ -12,9 +12,9 @@ function App() {
   return (
     <>
       <Header upstate = {updaterefreshRate} />
-      <Stack gap={2} className="col-md-5 mx-auto">
+      <Stack gap={2} className="mx-auto">
         <div className="p-2"></div>
-        <div className="p-2"><Pilot refreshRate={refreshRate}/></div>
+        <div><Pilot refreshRate={refreshRate}/></div>
       </Stack>
     </>
   );
